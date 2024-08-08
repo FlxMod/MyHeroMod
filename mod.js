@@ -4,7 +4,33 @@ export const Mod = {
     build: '',
     menu: [],
     callbacks: {},
-    var: {},
+    debug: true,
+    var: {
+        _秘境开始层数: 1,
+        _秘境结束层数: 100,
+        _秘境当前层数: 1,
+        _一键秘境定时器: false,
+        _盲盒ID: 1,
+        _盲盒定时器: false,
+        _盲盒延迟: 1000,
+        _自动杀死怪物: false
+    },
+    flag:{
+        killMonster: false,
+    },
+    timer:{
+
+    },
+    triggerFlag(name){
+        if(Mod.flag[name]){
+            Mod.flag[name] = false; //为了不重复写这行代码 创建了triggerFlag方法
+            return true;
+        }
+        return false;
+    },
+    timer:{
+        _无敌buff:false
+    },
     Init: (name, getMenu, hook, version = '', build = '') => {
         Mod.name = name;
         Mod.getMenu = getMenu;
@@ -65,6 +91,11 @@ export const Mod = {
                 onchange: Mod.callbackHandle
             });
             Mod.menuInstance.state();
+        }
+    },
+    debugLog(...arg){
+        if(Mod.debug){
+            console.log(...arg)
         }
     },
     startHook: undefined,

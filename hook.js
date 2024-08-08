@@ -20,6 +20,39 @@ export const hook = (Mod) => {
             // 屏蔽盲盒动画
             lib.class('GearEngine.Network.ActivityBlindboxProtocolHandler').method('OnMoreBuy').implementation = function(a,b){
             }
+            
+
+            lib.class('Battle.BattleManager').method('Update').implementation = function () {
+                this.method('Update').invoke();
+                if (Mod.triggerFlag('killMonster')){
+                    this.method('KillAllMonster').invoke();
+                }
+            }
+
+            lib.class("MonsterAiController").method("Shoot").implementation = function () {
+                if (Mod.var._自动杀死怪物) Mod.flag.killMonster = true;
+                this.method('Shoot').invoke();
+            }
+            
+            antiBan(Mod);
         });
     // },1000)
+}
+
+// 阻止日志上传 可防止部分封号检测
+const antiBan = (Mod) => {
+    let lib = Il2Cpp.Domain.assembly('Assembly-CSharp').image;
+    
+    lib.class("Battle.BattleLog").method("UpLoad").implementation = function () {
+        Mod.debugLog('Battle.BattleLog UpLoad');
+    }
+    lib.class("Battle.BattleLog").method("UpLoadDuration").implementation = function () {
+        Mod.debugLog('Battle.BattleLog UpLoadDuration');
+    }
+    lib.class("Battle.BattleLog").method("UpLoadFinish").implementation = function () {
+        Mod.debugLog('Battle.BattleLog UpLoadFinish');
+    }
+    lib.class("Battle.BattleServerLog").method("Send").implementation = function () {
+        Mod.debugLog('Battle.BattleServerLog Send');
+    }
 }

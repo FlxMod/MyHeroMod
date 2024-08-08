@@ -7,6 +7,70 @@ export const getMenu = (m) => {
             'type': 'tab',
             'item': [
                 {
+                    'title': '常用功能',
+                    'item': [
+                        {
+                            'type': 'switch',
+                            'title': '自动杀死所有怪物',
+                            'val': false,
+                            'callback': (res) => {
+                                Mod.var._自动杀死怪物 = res.val;
+                            }
+                        },
+                        {
+                            'type': 'button',
+                            'title': '手动触发杀死所有怪物',
+                            'callback': () => {
+                                Mod.flag.killMonster = true;
+                            }
+                        },
+                        {
+                            'type': 'button',
+                            'title': '卡星界点我',
+                            'callback': () => {
+                                Il2Cpp.perform(() => {
+                                    var lib = Il2Cpp.Domain.assembly('Assembly-CSharp').image;
+                                    let NetManager = lib.class('NetManager').field('_instance').value;
+                                    let ApplicationNetworker = NetManager.field('_networker').value;
+                                    let dungeonTeamProtocolHandler = ApplicationNetworker.field('dungeonTeamProtocolHandler').value;
+                                    dungeonTeamProtocolHandler.method('DungeonQuit').invoke();
+                                });
+                            }
+                        },
+                        {
+                            'type': 'button',
+                            'title': '测试添加100buff',
+                            'callback': () => {
+                                Il2Cpp.perform(() => {
+                                    let lib = Il2Cpp.Domain.assembly('Assembly-CSharp').image;
+                                    let BattleManager = lib.class('Battle.BattleManager').method('get_Instance').invoke();
+                                    let MyheroGroup = BattleManager.method('GetMyHero').invoke();
+                                    MyheroGroup.method('AddGloableBuff').invoke(100);
+                                });
+                            }
+                        },
+                        {
+                            'type': 'switch',
+                            'title': '无敌buff',
+                            'val': false,
+                            'callback': (res) => {
+                                if(res.val == true){
+                                    Mod.timer._无敌buff = setInterval(()=>{
+                                        Il2Cpp.perform(() => {
+                                            let lib = Il2Cpp.Domain.assembly('Assembly-CSharp').image;
+                                            let BattleManager = lib.class('Battle.BattleManager').method('get_Instance').invoke();
+                                            let MyheroGroup = BattleManager.method('GetMyHero').invoke();
+                                            MyheroGroup.method('AddGloableBuff').invoke(211);
+                                        },3000);
+                                    },Mod.var._盲盒延迟);
+                                }else{
+                                    if(Mod.timer._无敌buff)clearInterval(Mod.timer._无敌buff);
+                                }
+                            }
+                        },
+                    ]
+                },
+                {
                     'title': '起号功能',
                     'item': [
                         {
