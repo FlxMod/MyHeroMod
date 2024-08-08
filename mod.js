@@ -68,7 +68,7 @@ export const Mod = {
         });
     },
     callbackHandle: (val) => {
-        console.log(JSON.stringify(val))
+        // console.log(JSON.stringify(val))
         if (Mod.callbacks[val.id]) Mod.callbacks[val.id](val)
     },
     createMenu: () => {

@@ -8,7 +8,10 @@ export const start = () => {
     Mod.var._秘境结束层数 = 100;
     Mod.var._秘境当前层数 = 1;
     Mod.var._一键秘境定时器 = false;
-    Mod.Init('Rikka',getMenu,hook,'1.0.0','24060100');
+    Mod.var._盲盒ID = 1;
+    Mod.var._盲盒定时器 = false;
+    Mod.var._盲盒延迟 = 1000;
+    Mod.Init('DDDDPro',getMenu,hook,'1.0.0','24060100');
     // if(device.isPortrait()){
     //     Mod.menuInstance.size(parseInt(device.getScreenHeight() / 3),device.getScreenWidth())
     // }else{
