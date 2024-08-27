@@ -13,13 +13,15 @@ export const Mod = {
         _盲盒ID: 1,
         _盲盒定时器: false,
         _盲盒延迟: 1000,
-        _自动杀死怪物: false
+        _自动杀死怪物: false,
+        _开拓ID:1,
+        _开拓计数:0,
+        _开拓延迟:100,
+        _开拓定时器:false,
+        _隐藏任务奖励弹窗:false,
     },
     flag:{
         killMonster: false,
-    },
-    timer:{
-
     },
     triggerFlag(name){
         if(Mod.flag[name]){

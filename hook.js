@@ -15,11 +15,29 @@ export const hook = (Mod) => {
             // 隐藏加载
             lib.class("UISystem.UIManager").method("ShowLoading").overload("System.String").implementation = function (e) {
                 this.method("ShowLoading").overload("System.String").invoke(e);
-                if (Mod.var._盲盒定时器)this.method("HideLoadin").invoke();
+                // if (Mod.var._盲盒定时器)this.method("HideLoadin").invoke();
+                this.method("HideLoadin").invoke();
             };
             // 屏蔽盲盒动画
             lib.class('GearEngine.Network.ActivityBlindboxProtocolHandler').method('OnMoreBuy').implementation = function(a,b){
             }
+
+            // 屏蔽开拓奖励弹窗
+            lib.class('GearEngine.Network.PioneerAcademyProtocolHandler').method('OnNodeReward').implementation = function(a,b){
+                if(!Mod.var._开拓定时器)this.method('OnNodeReward').invoke(a,b)
+            }
+
+            // 屏蔽分解弹窗
+            lib.class('GearEngine.Network.ItemProtocolHandler').method('OnResolve').implementation = function(a,b){
+                if(!Mod.var._开拓定时器)this.method('OnResolve').invoke(a,b)
+            }
+
+            // 屏蔽任务奖励弹窗
+            lib.class('GearEngine.Network.NewTaskProtocolHandler').method('OnTaskReward').implementation = function(a,b){
+                if(!Mod.var._隐藏任务奖励弹窗)this.method('OnTaskReward').invoke(a,b)
+            }
+
+            
             
 
             lib.class('Battle.BattleManager').method('Update').implementation = function () {
@@ -35,6 +53,15 @@ export const hook = (Mod) => {
             }
             
             antiBan(Mod);
+
+            Il2Cpp.trace()
+            .assemblies(Il2Cpp.Domain.assembly('Assembly-CSharp'))
+            .filterClasses(klass => klass.name.indexOf('ProtocolHandler') > -1)
+            // .filterClasses(klass => klass.name.indexOf('GearEngine') > -1 || klass.namespace.indexOf('GearEngine') > -1)
+            
+            // .filterMethods(method => method.name != 'Update' && method.name != 'OnGUI')
+            .and()
+            .attach("detailed");
         });
     // },1000)
 }

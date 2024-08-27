@@ -74,6 +74,14 @@ export const getMenu = (m) => {
                     'title': '起号功能',
                     'item': [
                         {
+                            'type': 'switch',
+                            'title': '隐藏任务奖励弹窗',
+                            'val': false,
+                            'callback': (res) => {
+                                Mod.var._隐藏任务奖励弹窗 = res.val;
+                            }
+                        },
+                        {
                             'type': 'button',
                             'title': '一键EX3',
                             'callback': (val) => {
@@ -177,7 +185,7 @@ export const getMenu = (m) => {
                                             ids.method('Add').invoke(1);
 
                                             dungeonProtocolHandler.method("LocalStart").invoke(0, 35, level, 0, 0);
-                                            dungeonProtocolHandler.method("LocalEnd").invoke(35, level, 0, 0, 0, 0, 3);
+                                            dungeonProtocolHandler.method("LocalEnd").invoke(35, level, 0, 0, 0, 0, 3,0);
                                             newInnersProtocolHandler.method('Star').invoke(ids);
                                             dungeonProtocolHandler.method("Leave").invoke();
                                             Mod.var._秘境当前层数++;
@@ -261,6 +269,105 @@ export const getMenu = (m) => {
                             }
                         },
 
+                    ]
+                },
+                {
+                    'title': '开拓之路',
+                    'item': [
+                        {
+                            'type': 'input',
+                            'title': 'tabid(1-6)',
+                            'val': Mod.var._开拓ID.toString(),
+                            'callback': (res) => {
+                                Mod.var._开拓ID = parseInt(res.val);
+                            }
+                        },
+                        {
+                            'type': 'input',
+                            'title': '延迟',
+                            'val': Mod.var._开拓延迟.toString(),
+                            'callback': (res) => {
+                                Mod.var._开拓延迟 = parseInt(res.val);
+                            }
+                        },
+                        {
+                            'type': 'switch',
+                            'title': '开关',
+                            'val': false,
+                            'callback': (res) => {
+                                if(res.val == true){
+                                    {
+                                        Mod.var._开拓计数 = 0;
+                                        Mod.var._开拓定时器 = setInterval(()=>{
+                                            Il2Cpp.perform(() => {
+                                                var lib = Il2Cpp.Domain.assembly('Assembly-CSharp').image;
+                                                let NetManager = lib.class('NetManager').field('_instance').value;
+                                                let ApplicationNetworker = NetManager.field('_networker').value;
+                                                let pioneerAcademyProtocolHandler = ApplicationNetworker.field('pioneerAcademyProtocolHandler').value;
+
+                                                pioneerAcademyProtocolHandler.method('NodeReward').invoke(Mod.var._开拓ID,2)
+                                                pioneerAcademyProtocolHandler.method('NodeReward').invoke(Mod.var._开拓ID,1)
+                                            });
+                                            if(Mod.var._开拓ID == 1){
+                                                if(Mod.var._开拓计数>=100){
+                                                    Mod.var._开拓计数 = 0;
+                                                    Il2Cpp.perform(() => {
+                                                        var lib = Il2Cpp.Domain.assembly('Assembly-CSharp').image;
+                                                        let items = lib.class('Data.ItemHelper').method('GetAllBagItemInfo').invoke();
+                                                        if (items && items.method('get_Count').invoke() > 0) {
+                                                            let SystemInt32 = Il2Cpp.Image.corlib.class('System.UInt32')
+                                                            let GenericList = Il2Cpp.Image.corlib.class('System.Collections.Generic.List`1')
+                                                            let SystemInt32List = GenericList.inflate(SystemInt32);
+                                                            let ids = SystemInt32List.new();
+                                                    
+                                                            for (let i = 0; i < items.method('get_Count').invoke(); i++) {
+                                                                let r = items.method('get_Item').invoke(parseInt(i));
+                                                                let type = r.field('type').value;
+                                                                let key = r.field('itemKey').value;
+                                                                if (r.field('IsProtected').value != true) {
+                                                                    ids.method('Add').invoke(key);
+                                                                }
+                                                            }
+                                                    
+                                                            if (ids.method('get_Count').invoke() > 0) {
+                                                                let NetManager = lib.class('NetManager').field('_instance').value;
+                                                                let ApplicationNetworker = NetManager.field('_networker').value;
+                                                                let itemProtocolHandler = ApplicationNetworker.field('itemProtocolHandler').value;
+                                                                itemProtocolHandler.method('Resolve').invoke(ids);
+                                                            }
+                                                        }
+                                                    });
+                                                }else{
+                                                    Mod.var._开拓计数++;
+                                                }
+                                            }
+                                        },Mod.var._开拓延迟);
+                                    }
+                                }else{
+                                    if(Mod.var._开拓定时器){
+                                        clearInterval(Mod.var._开拓定时器);
+                                        Mod.var._开拓定时器 = false;
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            'type': 'button',
+                            'title': '一键完成任务',
+                            'callback': (val) => {
+                                Il2Cpp.perform(() => {
+                                    var lib = Il2Cpp.Domain.assembly('Assembly-CSharp').image;
+                                    let NetManager = lib.class('NetManager').field('_instance').value;
+                                    let ApplicationNetworker = NetManager.field('_networker').value;
+                                    let newTaskProtocolHandler = ApplicationNetworker.field('newTaskProtocolHandler').value;
+                                    let ids = [7901,7902,7903,7904,7905,7906,7907,7908,7909,7910,7911,7912,7913,7914,7915,7916,7917,7918,7919,7920,7921,7922,7923,7924,7925,7926,7927,7928,7929,7930,7931,7932,7933,7934,7935,7936,7937,7938,7939,7940,7941,7942,7943,7944,7945,7946,7947,7948,7949,7950,7951,7952,7953,7954,7955,7956,7957,7958,7959,7960,7961,7962,7963,7964,7965,7966,7967,7968,7969,7970,7971,7972,7973,7974,7975,7976,7977,7978,7979,7980,7981,7982,7983,7984,7985,7986,7987,7988,7989,7990,7991,7992,7993,7994,7995,7996,7997,7998,7999,8000,8001,8002,8003,8004,8005,8006,8007,8008,8009,8010,8011,8012]
+                                    ids.forEach((id) => {
+                                        newTaskProtocolHandler.method('TaskUpdate').invoke(id, 1, 2, 100000000);
+                                        newTaskProtocolHandler.method('TaskReward').invoke(id, 28);
+                                    });
+                                });
+                            }
+                        },
                     ]
                 },
                 {
