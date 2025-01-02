@@ -9,8 +9,8 @@ export const hook = (Mod) => {
             let lib = Il2Cpp.Domain.assembly('Assembly-CSharp').image;
             // Hook获取设备码
             lib.class('GearEngine.OperatingSystem.Native.NativeInfo').method('GetDeviceID').implementation = ()  => {
-                // return Il2Cpp.String.from(uuid());
-                return Il2Cpp.String.from('1231231231561');
+                return Il2Cpp.String.from(uuid());
+                // return Il2Cpp.String.from('1231231231561');
             }
             // 隐藏加载
             lib.class("UISystem.UIManager").method("ShowLoading").overload("System.String").implementation = function (e) {
