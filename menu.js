@@ -185,7 +185,7 @@ export const getMenu = (m) => {
                                             ids.method('Add').invoke(1);
 
                                             dungeonProtocolHandler.method("LocalStart").invoke(0, 35, level, 0, 0);
-                                            dungeonProtocolHandler.method("LocalEnd").invoke(35, level, 0, 0, 0, 0, 3,0);
+                                            dungeonProtocolHandler.method("LocalEnd").invoke(35, level, 0, 0, 0, 0, 3,0,0,0);
                                             newInnersProtocolHandler.method('Star').invoke(ids);
                                             dungeonProtocolHandler.method("Leave").invoke();
                                             Mod.var._秘境当前层数++;
