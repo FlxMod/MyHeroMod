@@ -1,5 +1,17 @@
 import 'frida-il2cpp-bridge'
 
+function generateRandomString(length) {
+    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomString = '';
+
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * charset.length);
+        randomString += charset[randomIndex];
+    }
+
+    return randomString;
+}
+
 export const hook = (Mod) => {
     // setTimeout(_=>{
         console.log('start hook');
@@ -9,7 +21,12 @@ export const hook = (Mod) => {
             let lib = Il2Cpp.Domain.assembly('Assembly-CSharp').image;
             // Hook获取设备码
             lib.class('GearEngine.OperatingSystem.Native.NativeInfo').method('GetDeviceID').implementation = ()  => {
-                return Il2Cpp.String.from(uuid());
+                if (typeof uuid != 'undefined') {
+                    return Il2Cpp.String.from(uuid());
+                }else{
+                    return Il2Cpp.String.from(generateRandomString(32));
+                }
+                
                 // return Il2Cpp.String.from('1231231231561');
             }
             // 隐藏加载
